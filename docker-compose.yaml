@@ -1,0 +1,17 @@
+services:
+  react:
+    build:
+      context: /MernStack-DockerWith-Deploy/frontend
+      dockerfile: Dockerfile
+    container_name: react-container
+    ports:
+      - '3000:3000'
+  
+  node:
+    build: 
+      context: /MernStack-DockerWith-Deploy/backend
+      dockerfile: Dockerfile
+    container_name: node-container
+    ports:
+      - '4000:4000'
+    stdin_open: true
