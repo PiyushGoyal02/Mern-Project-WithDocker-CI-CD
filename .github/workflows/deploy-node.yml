@@ -1,0 +1,20 @@
+name: Deploy Node.js App
+
+on:
+    push:
+        branches: ["main"]
+
+jobs:
+    build:
+        runs-on: self-hosted
+
+        steps:
+            - uses: actions/checkout@v4
+            - name: Build Docker Image
+              run: |
+                cd MiroCode/backend
+                docker build -t ${{ SECRET_DOCKER_USERNAME }}/nodeapp:${{ github.sha }} .
+            - name: Push Docker Imageto Docker Hub
+                run: |
+                    echo "${{ SECRET_DOCKER_PASSWORD }}" | docker login -u "${{ SECRET_DOCKER_USERNAME }}" --password-stdin
+                    docker push ${{ SECRET_DOCKER_USERNAME }}/nodeapp:${{ github.sha }}
