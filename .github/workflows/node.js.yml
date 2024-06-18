@@ -18,7 +18,6 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
     steps:
     - uses: actions/checkout@v4
-    - run:  cd /home/ec2-user/actions-runner/_work/Mern-Project-WithDocker-CI-CD/Mern-Project-WithDocker-CI-CD/frontend
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
