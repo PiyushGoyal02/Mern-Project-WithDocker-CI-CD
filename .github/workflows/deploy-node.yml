@@ -9,12 +9,34 @@ jobs:
         runs-on: self-hosted
 
         steps:
-            - uses: actions/checkout@v4
-            - name: Build Docker Image
-              run: |
-                cd MiroCode/backend
-                docker build -t ${{ SECRET_DOCKER_USERNAME }}/nodeapp:${{ github.sha }} .
-            - name: Push Docker Imageto Docker Hub
-                run: |
-                    echo "${{ SECRET_DOCKER_PASSWORD }}" | docker login -u "${{ SECRET_DOCKER_USERNAME }}" --password-stdin
-                    docker push ${{ SECRET_DOCKER_USERNAME }}/nodeapp:${{ github.sha }}
+        - name: Go to Backend Folder
+          run: cd MiroCode/backend
+
+        - name: checkout Repository
+          uses: actions/checkout@v4
+
+        - name: Setup Node.js 
+          uses: actions/setup-node@v3
+          with:
+            node-version: 18 
+
+        - name: Login in to Docker hub 
+          uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+          with:
+            password: ${{ secrets.SECRET_DOCKER_USERNAME }}
+            username: ${{ secrets.SECRET_DOCKER_PASSWORD }}
+
+        - name: Dependencies Download
+          run: npm install
+
+        - name: Build Docker Image
+          run: docker build -t ${{ secrets.SECRET_DOCKER_USERNAME }}/node-app .
+
+        - name: React Project Deploy on Docker Hub
+          run: docker build -t ${{secrets.SECRET_DOCKER_USERNAME}}/deploynodeapp .
+
+        - name: Push docker on Docker Hub
+          run: docker push ${{secrets.SECRET_DOCKER_USERNAME}}/deploynodeapp
+
+        - name: React Project run
+          run: sudo systemctl reload nginx
