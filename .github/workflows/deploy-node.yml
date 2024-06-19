@@ -20,11 +20,11 @@ jobs:
           with:
             node-version: 18 
 
-        - name: Login to Docker Hub
-          run: docker login -u ${{ secrets.SECRET_DOCKER_USERNAME }} -p ${{ secrets.SECRET_DOCKER_PASSWORD }}
-
         - name: Dependencies Download
           run: npm install
+
+        - name: Login to Docker Hub
+          run: docker login -u ${{ secrets.SECRET_DOCKER_USERNAME }} -p ${{ secrets.SECRET_DOCKER_PASSWORD }}
 
         - name: Build Docker Image
           run: docker build -t ${{ secrets.SECRET_DOCKER_USERNAME }}/node-app .
